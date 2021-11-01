@@ -1,0 +1,30 @@
+plugins {
+    id 'org.spongepowered.plugin' version '0.9.0'
+}
+
+group = 'at.sudo200.essentia'
+version = '1.0'
+
+dependencies {
+    implementation 'org.jetbrains:annotations:20.1.0'
+    compileOnly 'org.spongepowered:spongeapi:7.2.0'
+    annotationProcessor 'org.spongepowered:spongeapi:7.2.0'
+}
+
+sponge.plugin.id = 'essentia'
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
